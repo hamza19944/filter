@@ -171,7 +171,6 @@ function IconToDelete(icons){
             }
         })
     })
-    
 }
 
 
@@ -211,7 +210,7 @@ let cover = document.createElement('div')
 function hoverFunc(){   
     let cardImages = document.querySelectorAll(".img img")
     cardImages.forEach((cardImage) => {
-        cardImage.addEventListener("mouseover", () => {
+        cardImage.addEventListener("click", () => {
             cover.className = 'cover'
             covered.appendChild(cover);
     
@@ -230,3 +229,41 @@ function hoverFunc(){
 }
 
 hoverFunc()
+
+
+// animation motion 
+let imageIcons = document.querySelectorAll(".bottom .card .img i")
+imageIcons.forEach(i => {
+    i.addEventListener("click", () => {
+        // i.style.animation = 'anime 0.3s ease'
+        let bodyrect = document.body.getBoundingClientRect()
+        let bodyWidth = bodyrect.width
+        let bodyY = bodyrect.y
+
+        let rect = i.getBoundingClientRect()
+        let left = bodyWidth - (rect.x + 40)
+        // left.toString()
+        let top = -1 * (rect.y + 40)
+        // top.toString()
+
+        console.log(rect.x);
+        console.log(rect.y);
+        i.animate([
+            { // from
+                width: '38px',
+                height: '35px',
+                backgroundColor: 'white',
+                color: 'black',
+                transform: `translate(0%, -166%)`,
+                zIndex: 4,
+            },
+            { // to
+                backgroundColor: 'white',
+                color: 'black',
+                transform: `translate(${left}px, ${top}px)`,
+                zIndex: 4,
+                transform: 'scale(0.2)'
+            }
+        ], 500);
+    })
+})
