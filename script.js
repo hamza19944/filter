@@ -75,6 +75,7 @@ list.forEach((li) => {
         }
         // change the cart setting function after filtering
         changeCartSettings()
+        hoverFunc()
         filter = []
         divs = []
     })
@@ -198,3 +199,34 @@ function changeAndRemove(){
     document.querySelector('.side-bar .sum span').innerText = 0
     document.querySelector('.cart-shopping .num-items').innerText = 0
 }
+
+// bigger pic with darker background
+
+
+// putting cover when on-mouseover
+
+let covered = document.querySelector(".prod .container")
+let cover = document.createElement('div')
+
+function hoverFunc(){   
+    let cardImages = document.querySelectorAll(".img img")
+    cardImages.forEach((cardImage) => {
+        cardImage.addEventListener("mouseover", () => {
+            cover.className = 'cover'
+            covered.appendChild(cover);
+    
+            cardImage.classList.add("hovered")
+            
+            // cardImage.className = 'hovered'
+            // cover.appendChild(cardImage)
+            
+            cover.onmouseover = function(){
+                cardImage.classList.remove("hovered")
+                cover.classList.remove('cover')
+                covered.removeChild(covered.lastElementChild);
+            }
+        })
+    })
+}
+
+hoverFunc()
