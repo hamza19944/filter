@@ -44,6 +44,17 @@ if(changeBoolean){
         console.log(changeBoolean);
     }
 }
+sideBar.addEventListener("mouseout", (e)=>{
+    let bodyCheck = document.querySelector("body")
+    if(sideBar.contains(event.target)){
+        bodyCheck.onclick = () => {
+            if(changeBoolean){
+                sideBar.style.opacity = '0'
+            }
+        }
+        changeBoolean = true
+    }
+})
 
 // change the cart setting function without filter
 changeCartSettings()
