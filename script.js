@@ -30,12 +30,18 @@ for(let i = 0; i < sweetsObj.length; i++){
 let btnSideCart = document.querySelector('.cart-shopping')
 let sideBar = document.querySelector(".side-bar")
 
-btnSideCart.onclick = function (){
-    if(sideBar.style.opacity === '0'){
-        sideBar.style.opacity = '0.8'
-        sideBar.style.zIndex = 2
-    }else{
-        sideBar.style.opacity = '0'
+let changeBoolean = true;
+if(changeBoolean){
+    btnSideCart.onclick = function (){
+        if(changeBoolean){
+            sideBar.style.opacity = '0.8'
+            sideBar.style.zIndex = 2 
+            changeBoolean = false
+        }else{
+            sideBar.style.opacity = '0'
+            changeBoolean = true
+        }
+        console.log(changeBoolean);
     }
 }
 
@@ -101,8 +107,7 @@ bar.addEventListener('click', () => {
         bar.classList.remove("motion")
     }
 })
-
-
+// change cart settings
 function changeCartSettings() {
     
     // change the cart setting after filtering
@@ -153,6 +158,8 @@ function changeCartSettings() {
     })
 }
 
+
+// delete icon function
 function IconToDelete(icons){
     icons.forEach((icon) => {
         icon.addEventListener("click", () => {
@@ -174,7 +181,7 @@ function IconToDelete(icons){
 }
 
 
-
+// change total price function
 function changePrice(priceList) {
     document.querySelector(".cart-shopping p .price").innerText = ''
     priceList.forEach(proPrice => {
@@ -189,7 +196,7 @@ function changePrice(priceList) {
 let clearButton = document.querySelector(".side-bar .card-btns").firstElementChild
 clearButton.onclick = changeAndRemove
 
-
+// delete price function
 function changeAndRemove(){
     document.querySelectorAll('.side-bar .product .choice').forEach(choice => {
         choice.remove()
@@ -200,8 +207,6 @@ function changeAndRemove(){
 }
 
 // bigger pic with darker background
-
-
 // putting cover when on-mouseover
 
 let covered = document.querySelector(".prod .container")
@@ -241,13 +246,16 @@ imageIcons.forEach(i => {
         let bodyY = bodyrect.y
 
         let rect = i.getBoundingClientRect()
-        let left = bodyWidth - (rect.x + 40)
-        // left.toString()
-        let top = -1 * (rect.y + 40)
-        // top.toString()
+        let left = Math.floor(bodyWidth - (rect.x + 40))
+        
+        let top = Math.floor(-1 * (rect.y + 40)) 
+        let leftToString = left.toString() + 'px'
+        let topToString = top.toString() + 'px'
 
-        console.log(rect.x);
-        console.log(rect.y);
+        console.log(leftToString);
+        console.log(topToString);
+
+
         i.animate([
             { // from
                 width: '38px',
@@ -260,10 +268,10 @@ imageIcons.forEach(i => {
             { // to
                 backgroundColor: 'white',
                 color: 'black',
-                transform: `translate(${left}px, ${top}px)`,
+                transform: `translate(${leftToString}, ${topToString}) scale(0.2)`,
                 zIndex: 4,
-                transform: 'scale(0.2)'
+                // transform: 'scale(0.2)'
             }
-        ], 500);
+        ], 1000);
     })
 })
