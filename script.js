@@ -26,6 +26,29 @@ for(let i = 0; i < sweetsObj.length; i++){
     card.appendChild(div)
 }
 
+// Get What is in The Storage 
+window.addEventListener("load", ()=>{
+    for (let i = 0; i < localStorage.length; i++) {
+        let theUrl;
+        if(sweetsObj[i].name === localStorage.key(i)){
+            theUrl = sweetsObj[i].image
+        }
+        console.log(theUrl);
+        let createdivFromStorage = document.createElement('div')
+        createdivFromStorage.className = 'choice'
+        createdivFromStorage.innerHTML = `
+                <img src="${theUrl}" alt="">
+                <div class="name-price">
+                    <span>${localStorage.key(i)}</span>
+                    <span class = 'price'>${localStorage.getItem(localStorage.key(i))}</span>
+                </div>
+                <i class="fa-solid fa-trash-can"></i>`
+                
+        document.querySelector(".product").appendChild(createdivFromStorage)
+    }
+})
+
+
 // hide and appear side-cart
 let btnSideCart = document.querySelector('.cart-shopping')
 let sideBar = document.querySelector(".side-bar")
@@ -41,20 +64,19 @@ if(changeBoolean){
             sideBar.style.opacity = '0'
             changeBoolean = true
         }
-        console.log(changeBoolean);
     }
 }
-sideBar.addEventListener("mouseout", (e)=>{
-    let bodyCheck = document.querySelector("body")
-    if(sideBar.contains(event.target)){
-        bodyCheck.onclick = () => {
-            if(changeBoolean){
-                sideBar.style.opacity = '0'
-            }
-        }
-        changeBoolean = true
-    }
-})
+// sideBar.addEventListener("mouseout", (e)=>{
+//     let bodyCheck = document.querySelector("body")
+//     if(sideBar.contains(event.target)){
+//         bodyCheck.onclick = () => {
+//             if(changeBoolean){
+//                 sideBar.style.opacity = '0'
+//             }
+//         }
+//         changeBoolean = true
+//     }
+// })
 
 // change the cart setting function without filter
 changeCartSettings()
@@ -123,10 +145,8 @@ function changeCartSettings() {
     
     // change the cart setting after filtering
     let productSideBar = sideBar.querySelector('.product')
-    
     let totalPriceChoices = sideBar.querySelector('.sum').querySelector('span')
     
-    //.querySelector('img').src
     let productsImgs = document.querySelectorAll('.img')
     let productsCards = document.querySelectorAll(".card")
     
@@ -158,6 +178,11 @@ function changeCartSettings() {
             IconToDelete(choiceDeleteIcons)
     
             let sideChoices = sideBar.querySelectorAll('.choice')
+
+            // add to the localStorage
+            setToStorage(sideChoices)
+            console.log(sideChoices);
+
             // number items  &&  select all choices
             document.querySelector('.cart-shopping .num-items').innerText = sideChoices.length
     
@@ -169,19 +194,29 @@ function changeCartSettings() {
     })
 }
 
-
+// add to storage function
+function setToStorage(choicesList) {
+    console.log(choicesList);
+    choicesList.forEach(choice => {
+        let thePrice = choice.children[1].children[1].innerText
+        let theName = choice.children[1].children[0].innerText
+        let setChoiceToStorage = localStorage.setItem(theName, thePrice)
+    } )
+}
 // delete icon function
 function IconToDelete(icons){
     icons.forEach((icon) => {
         icon.addEventListener("click", () => {
-            if(icon.parentElement.parentElement.querySelectorAll('.choice').length > 1){
+            if(icon.parentElement.parentElement && icon.parentElement.parentElement.querySelectorAll('.choice').length > 1){
                 icon.parentElement.remove()
                 let price = +document.querySelector(".cart-shopping p .price").innerText - +document.querySelector('.side-bar .price').innerText.match(/\d/g).join("")
                 document.querySelector(".cart-shopping p .price").innerText = price
                 document.querySelector('.side-bar .sum span').innerText = price
                 document.querySelector('.cart-shopping .num-items').innerText = +document.querySelector('.cart-shopping .num-items').innerText - 1
+                deleteFromStorage(icon)
             }else{
                 icon.parentElement.remove()
+                deleteFromStorage(icon)
                 let price = 0
                 document.querySelector(".cart-shopping p .price").innerText = price
                 document.querySelector('.side-bar .sum span').innerText = price
@@ -190,7 +225,14 @@ function IconToDelete(icons){
         })
     })
 }
-
+// delete from localStorage
+function deleteFromStorage(item) {
+    for(let i = 0; i < localStorage.length; i++){
+        if(item.parentElement.querySelector(".name-price").firstElementChild.innerText === localStorage.key(i)){
+            localStorage.removeItem(localStorage.key(i))
+        }
+    }
+}
 
 // change total price function
 function changePrice(priceList) {
@@ -262,10 +304,6 @@ imageIcons.forEach(i => {
         let top = Math.floor(-1 * (rect.y + 40)) 
         let leftToString = left.toString() + 'px'
         let topToString = top.toString() + 'px'
-
-        console.log(leftToString);
-        console.log(topToString);
-
 
         i.animate([
             { // from
