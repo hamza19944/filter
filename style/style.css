@@ -464,3 +464,58 @@ header .side-bar{
 }
 
 /* end product */
+.contacts-icons{
+    position: fixed;
+    right: 50px;
+    bottom: 50px;
+    border-radius: 50%;
+    height: 80px;
+    width: 80px;
+    z-index: 4;
+    justify-content: center;
+    align-items: center;
+    display: none;
+    transition: .3s ease-in-out;
+}
+.contacts-icons i{
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80px;
+    width: 80px;
+    font-size: 45px;
+    border-radius: 50%;
+    bottom: 0;
+}
+.contacts-icons:hover{
+    display: flex;
+    flex-direction: column;
+    height: 260px;
+    justify-content: space-between;
+}
+.contacts-icons:hover i:first-child{
+    top: 0;
+}
+.contacts-icons:hover i:nth-child(2){
+    top: 90px;
+}
+.contacts-icons:hover i:last-child{
+    bottom: 0;
+}
+.contacts-icons i:first-child{
+    color: white;
+    background-color: rgb(10, 157, 10);
+    border: 2px solid rgb(10, 157, 10);
+    
+}
+.contacts-icons i:nth-child(2){
+    color: white;
+    background-color: rgb(74, 74, 255);
+    border: 2px solid rgb(74, 74, 255);
+}
+.contacts-icons i:last-child{
+    color: rgb(142, 142, 255);
+    background-color: white;
+    border: 2px solid rgb(142, 142, 255);
+}

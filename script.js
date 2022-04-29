@@ -324,3 +324,14 @@ imageIcons.forEach(i => {
         ], 1000);
     })
 })
+
+// when scroll appear the contacts-icons
+window.addEventListener("scroll", () => {
+    let contactsIcons = document.querySelector('.contacts-icons');
+    if(window.scrollY >= 555){
+        contactsIcons.style.display = 'flex'
+    }
+    // else{
+    //     contactsIcons.style.display = 'none'
+    // }
+})
