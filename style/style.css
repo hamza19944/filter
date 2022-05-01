@@ -171,6 +171,10 @@ header .side-bar{
     align-items: center;
     transition: 1s ease;
 }
+/* header .side-bar::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 6px;
+}   */
 .side-bar .product{
     width: 100%;
     display: contents;
@@ -270,7 +274,7 @@ header .side-bar{
 .land .container h2 span{
     color: var(--main-color);
 }
-.land .container input{
+.land .container a{
     border: 3px solid black;
     margin: 10px auto;
     text-transform: uppercase;
@@ -281,9 +285,9 @@ header .side-bar{
     color: black;
     position: relative;
     z-index: 1;
-    /* transition: 0.2s; */
+    text-decoration: none;
 }
-.land .container input:hover{
+.land .container a:hover{
     background-color: black;
     color: var(--main-color);
     border: none;
@@ -475,7 +479,7 @@ header .side-bar{
     justify-content: center;
     align-items: center;
     display: none;
-    transition: .3s ease-in-out;
+    /* transition: .3s ease-in-out; */
 }
 .contacts-icons i{
     position: absolute;
@@ -486,7 +490,9 @@ header .side-bar{
     width: 80px;
     font-size: 45px;
     border-radius: 50%;
-    bottom: 0;
+    bottom: 0px;
+    transition: 0.3s;
+    cursor: pointer;
 }
 .contacts-icons:hover{
     display: flex;
@@ -495,19 +501,18 @@ header .side-bar{
     justify-content: space-between;
 }
 .contacts-icons:hover i:first-child{
-    top: 0;
+    bottom: 180px;
 }
 .contacts-icons:hover i:nth-child(2){
-    top: 90px;
+    bottom: 90px;
 }
 .contacts-icons:hover i:last-child{
-    bottom: 0;
+    bottom: 0px;
 }
 .contacts-icons i:first-child{
     color: white;
     background-color: rgb(10, 157, 10);
-    border: 2px solid rgb(10, 157, 10);
-    
+    border: 2px solid rgb(10, 157, 10); 
 }
 .contacts-icons i:nth-child(2){
     color: white;

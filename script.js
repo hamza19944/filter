@@ -46,6 +46,9 @@ window.addEventListener("load", ()=>{
                 
         document.querySelector(".product").appendChild(createdivFromStorage)
     }
+    let numitems = document.querySelector(".cart-shopping .num-items").innerText = localStorage.length
+    let priceList = document.querySelectorAll('.side-bar .choice .name-price .price')
+    changePrice(priceList)
 })
 
 
@@ -114,6 +117,7 @@ list.forEach((li) => {
         }
         // change the cart setting function after filtering
         changeCartSettings()
+        motion()
         hoverFunc()
         filter = []
         divs = []
@@ -288,43 +292,6 @@ function hoverFunc(){
 
 hoverFunc()
 
-
-// animation motion 
-let imageIcons = document.querySelectorAll(".bottom .card .img i")
-imageIcons.forEach(i => {
-    i.addEventListener("click", () => {
-        // i.style.animation = 'anime 0.3s ease'
-        let bodyrect = document.body.getBoundingClientRect()
-        let bodyWidth = bodyrect.width
-        let bodyY = bodyrect.y
-
-        let rect = i.getBoundingClientRect()
-        let left = Math.floor(bodyWidth - (rect.x + 40))
-        
-        let top = Math.floor(-1 * (rect.y + 40)) 
-        let leftToString = left.toString() + 'px'
-        let topToString = top.toString() + 'px'
-
-        i.animate([
-            { // from
-                width: '38px',
-                height: '35px',
-                backgroundColor: 'white',
-                color: 'black',
-                transform: `translate(0%, -166%)`,
-                zIndex: 4,
-            },
-            { // to
-                backgroundColor: 'white',
-                color: 'black',
-                transform: `translate(${leftToString}, ${topToString}) scale(0.2)`,
-                zIndex: 4,
-                // transform: 'scale(0.2)'
-            }
-        ], 1000);
-    })
-})
-
 // when scroll appear the contacts-icons
 window.addEventListener("scroll", () => {
     let contactsIcons = document.querySelector('.contacts-icons');
@@ -335,3 +302,81 @@ window.addEventListener("scroll", () => {
     //     contactsIcons.style.display = 'none'
     // }
 })
+
+// filtering after typing function
+let searchIcon = document.querySelector(".search i")
+function filtering (){
+    let filterText = document.querySelector(".search input").value
+    let regex = /[A-Za-z][^0-9_-]/ig
+    let checkValue = filterText.match(regex).join("")
+    console.log(checkValue);
+    let divs = document.querySelectorAll(".bottom .card")
+    divs.forEach(div => {
+        div.remove("div")
+    })
+    sweetsObj.filter(sweet => {
+        if(sweet.name.includes(checkValue)){
+            filter.push(sweet);
+        }
+    })
+    for(let i = 0; i < filter.length; i++){
+        let div = document.createElement("div")
+        div.className = 'card'
+        div.innerHTML = `
+                <div class="img">
+                    <img src="${filter[i].image}" alt="">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                </div>
+                <div class="price-card">
+                    <span class="name">${filter[i].name}</span>
+                    <span class="price">$${filter[i].price}</span>
+                </div>`
+        card.appendChild(div)
+    }
+    // change the cart setting function after filtering
+    changeCartSettings()
+    motion()
+    hoverFunc()
+    filter = []
+    divs = []
+}
+searchIcon.onclick = filtering
+
+// animation motion 
+function motion(){
+    let imageIcons = document.querySelectorAll(".bottom .card .img i")
+    imageIcons.forEach(i => {
+        i.addEventListener("click", () => {
+            // i.style.animation = 'anime 0.3s ease'
+            let bodyrect = document.body.getBoundingClientRect()
+            let bodyWidth = bodyrect.width
+            let bodyY = bodyrect.y
+    
+            let rect = i.getBoundingClientRect()
+            let left = Math.floor(bodyWidth - (rect.x + 40))
+            
+            let top = Math.floor(-1 * (rect.y + 40)) 
+            let leftToString = left.toString() + 'px'
+            let topToString = top.toString() + 'px'
+    
+            i.animate([
+                { // from
+                    width: '38px',
+                    height: '35px',
+                    backgroundColor: 'white',
+                    color: 'black',
+                    transform: `translate(0%, -166%)`,
+                    zIndex: 4,
+                },
+                { // to
+                    backgroundColor: 'white',
+                    color: 'black',
+                    transform: `translate(${leftToString}, ${topToString}) scale(0.2)`,
+                    zIndex: 4,
+                    // transform: 'scale(0.2)'
+                }
+            ], 1000);
+        })
+    })
+}
+motion()
