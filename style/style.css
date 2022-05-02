@@ -286,6 +286,7 @@ header .side-bar{
     position: relative;
     z-index: 1;
     text-decoration: none;
+    color: white;
 }
 .land .container a:hover{
     background-color: black;
@@ -312,7 +313,8 @@ header .side-bar{
 .about .container .about-us input{
     margin-top: 60px;
 }
-.about .container .image{
+.about .container .image img{
+    height: 300px;
     /* margin-left: 40px; */
 }
 /* end about */
@@ -383,6 +385,7 @@ header .side-bar{
     justify-content: center;
     align-items: center;
     position: relative;
+    overflow: hidden;
 }
 .prod .bottom .card{
     width: 300px;

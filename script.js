@@ -28,59 +28,59 @@ for(let i = 0; i < sweetsObj.length; i++){
 
 // Get What is in The Storage 
 window.addEventListener("load", ()=>{
-    for (let i = 0; i < localStorage.length; i++) {
-        let theUrl;
-        if(sweetsObj[i].name === localStorage.key(i)){
-            theUrl = sweetsObj[i].image
+    let theUrl;
+    for(let j = 0; j < sweetsObj.length; j++){
+        for (let i = 0; i < localStorage.length; i++) {
+            if(sweetsObj[j].name === localStorage.key(i)){
+                theUrl = sweetsObj[i].image
+                let createdivFromStorage = document.createElement('div')
+                createdivFromStorage.className = 'choice'
+                createdivFromStorage.innerHTML = `
+                        <img src="${theUrl}" alt="">
+                        <div class="name-price">
+                            <span>${localStorage.key(i)}</span>
+                            <span class = 'price'>${localStorage.getItem(localStorage.key(i))}</span>
+                        </div>
+                        <i class="fa-solid fa-trash-can"></i>`
+                        
+                document.querySelector(".product").appendChild(createdivFromStorage)
+            }
         }
-        console.log(theUrl);
-        let createdivFromStorage = document.createElement('div')
-        createdivFromStorage.className = 'choice'
-        createdivFromStorage.innerHTML = `
-                <img src="${theUrl}" alt="">
-                <div class="name-price">
-                    <span>${localStorage.key(i)}</span>
-                    <span class = 'price'>${localStorage.getItem(localStorage.key(i))}</span>
-                </div>
-                <i class="fa-solid fa-trash-can"></i>`
-                
-        document.querySelector(".product").appendChild(createdivFromStorage)
     }
     let numitems = document.querySelector(".cart-shopping .num-items").innerText = localStorage.length
     let priceList = document.querySelectorAll('.side-bar .choice .name-price .price')
     changePrice(priceList)
+    let icons = document.querySelectorAll('.choice i')
+    IconToDelete(icons)
 })
 
 
 // hide and appear side-cart
 let btnSideCart = document.querySelector('.cart-shopping')
 let sideBar = document.querySelector(".side-bar")
+let body = document.querySelector("body")
+
+checkBoolean()
 
 let changeBoolean = true;
-if(changeBoolean){
+let clicked = true;
+function checkBoolean() {
     btnSideCart.onclick = function (){
-        if(changeBoolean){
-            sideBar.style.opacity = '0.8'
-            sideBar.style.zIndex = 2 
-            changeBoolean = false
-        }else{
-            sideBar.style.opacity = '0'
-            changeBoolean = true
+        if (btnSideCart.contains(event.target)) {
+            if(clicked){
+                sideBar.style.opacity = '0.8'
+                sideBar.style.zIndex = 2 
+                clicked = false
+            }
+            else{
+                sideBar.style.opacity = '0'
+                sideBar.style.zIndex = -2 
+                clicked = true
+            }
         }
     }
 }
-// sideBar.addEventListener("mouseout", (e)=>{
-//     let bodyCheck = document.querySelector("body")
-//     if(sideBar.contains(event.target)){
-//         bodyCheck.onclick = () => {
-//             if(changeBoolean){
-//                 sideBar.style.opacity = '0'
-//             }
-//         }
-//         changeBoolean = true
-//     }
-// })
-
+checkBoolean()
 // change the cart setting function without filter
 changeCartSettings()
 
@@ -185,7 +185,7 @@ function changeCartSettings() {
 
             // add to the localStorage
             setToStorage(sideChoices)
-            console.log(sideChoices);
+            // console.log(sideChoices);
 
             // number items  &&  select all choices
             document.querySelector('.cart-shopping .num-items').innerText = sideChoices.length
@@ -200,7 +200,7 @@ function changeCartSettings() {
 
 // add to storage function
 function setToStorage(choicesList) {
-    console.log(choicesList);
+    // console.log(choicesList);
     choicesList.forEach(choice => {
         let thePrice = choice.children[1].children[1].innerText
         let theName = choice.children[1].children[0].innerText
@@ -258,6 +258,7 @@ function changeAndRemove(){
     document.querySelectorAll('.side-bar .product .choice').forEach(choice => {
         choice.remove()
     })
+    localStorage.clear()
     document.querySelector(".cart-shopping p .price").innerText = 0
     document.querySelector('.side-bar .sum span').innerText = 0
     document.querySelector('.cart-shopping .num-items').innerText = 0
@@ -305,17 +306,16 @@ window.addEventListener("scroll", () => {
 
 // filtering after typing function
 let searchIcon = document.querySelector(".search i")
+let filterText = document.querySelector(".search input")
 function filtering (){
-    let filterText = document.querySelector(".search input").value
-    let regex = /[A-Za-z][^0-9_-]/ig
-    let checkValue = filterText.match(regex).join("")
-    console.log(checkValue);
+    // let regex = /[A-Za-z][^0-9_-]/ig
+    // let checkValue = filterText.match(regex).join("")
     let divs = document.querySelectorAll(".bottom .card")
     divs.forEach(div => {
-        div.remove("div")
+         div.remove("div")
     })
-    sweetsObj.filter(sweet => {
-        if(sweet.name.includes(checkValue)){
+     sweetsObj.filter(sweet => {
+        if(sweet.name.includes(filterText.value.trim().toLowerCase())){
             filter.push(sweet);
         }
     })
@@ -340,7 +340,12 @@ function filtering (){
     filter = []
     divs = []
 }
-searchIcon.onclick = filtering
+filterText.addEventListener('keypress', function () {
+    filtering()    
+})
+searchIcon.addEventListener('click', function(){
+    filtering()    
+})
 
 // animation motion 
 function motion(){
@@ -375,7 +380,7 @@ function motion(){
                     zIndex: 4,
                     // transform: 'scale(0.2)'
                 }
-            ], 1000);
+            ], 500);
         })
     })
 }
