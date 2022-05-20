@@ -1,0 +1,15 @@
+[
+    {"name": "cake-2", "price": 3, "image": "images/cake-2.jpg"},
+    {"name": "cake-3", "price": 4, "image": "images/cake-2.jpg"},
+    {"name": "cookie-1", "price": 2, "image": "images/cake-2.jpg"},
+    {"name": "cookie-2", "price": 3, "image": "images/cake-2.jpg"},
+    {"name": "cupcake-1", "price": 5, "image": "images/cake-2.jpg"},
+    {"name": "cupcake-2", "price": 6, "image": "images/cake-2.jpg"},
+    {"name": "cupcake-3", "price": 4, "image": "images/cake-2.jpg"},
+    {"name": "donuts-1", "price": 5, "image": "images/cake-2.jpg"},
+    {"name": "donuts-2", "price": 2, "image": "images/cake-2.jpg"},
+    {"name": "donuts-3", "price": 4, "image": "images/cake-2.jpg"},
+    {"name": "sweets-1", "price": 5, "image": "images/cake-2.jpg"},
+    {"name": "sweets-2", "price": 8, "image": "images/cake-2.jpg"},
+    {"name": "sweets-3", "price": 6, "image": "images/cake-2.jpg"}
+]

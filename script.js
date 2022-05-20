@@ -5,7 +5,7 @@ for(let i = 0; i < sweets.length; i++){
     sweetsObj.push({
         name: sweets[i],
         price: 11 + i,
-        image: `./images/${sweets[i]}.jpg`
+        image: `images/${sweets[i]}.jpg`
     })
 }
 
@@ -384,4 +384,4 @@ function motion(){
         })
     })
 }
-motion()
+motion()    
