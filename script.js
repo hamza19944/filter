@@ -60,27 +60,32 @@ let btnSideCart = document.querySelector('.cart-shopping')
 let sideBar = document.querySelector(".side-bar")
 let body = document.querySelector("body")
 
-checkBoolean()
+let changeBoolean = false;
 
-let changeBoolean = true;
-let clicked = true;
-function checkBoolean() {
-    btnSideCart.onclick = function (){
-        if (btnSideCart.contains(event.target)) {
-            if(clicked){
-                sideBar.style.opacity = '0.8'
-                sideBar.style.zIndex = 2 
-                clicked = false
-            }
-            else{
-                sideBar.style.opacity = '0'
-                sideBar.style.zIndex = -2 
-                clicked = true
-            }
-        }
+btnSideCart.onclick = function (){
+    if(changeBoolean = !changeBoolean){
+        sideBar.style.opacity = '0.8'
+        sideBar.style.zIndex = 2 
     }
+    else{
+        sideBar.style.opacity = '0'
+        sideBar.style.zIndex = -2 
+    }      
 }
-checkBoolean()
+// let clicked = false;
+// body.onclick = () => {
+//     let bodyClicked = true
+//     sideBar.onclick = () => {
+//         clicked = true
+//         bodyClicked = false
+//     }
+//     if (clicked === false && bodyClicked === false) {
+//         sideBar.style.opacity = '0'
+//         sideBar.style.zIndex = -2
+//         clicked = true
+//     }
+// }
+
 // change the cart setting function without filter
 changeCartSettings()
 
@@ -161,6 +166,7 @@ function changeCartSettings() {
         let productsPrice = product.querySelector('.price-card .price').innerText
         let productsName = product.querySelector('.price-card .name').innerText
     
+        let amount = 0
         // when click on i add the div
         productBuyingIcon.addEventListener("click", (e) => {
             // productSideBar creation
@@ -172,7 +178,9 @@ function changeCartSettings() {
                     <span>${productsName}</span>
                     <span class = 'price'>${productsPrice}</span>
                 </div>
-                <i class="fa-solid fa-trash-can"></i>`   
+                <i class="fa-solid fa-trash-can"></i>
+                <span class = 'price'>${amount+1}</span>
+                `   
     
     
             // append inside the side-bar
