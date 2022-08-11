@@ -3,17 +3,19 @@ let sweets = ['cake-2', 'cake-3', 'cookie-1', 'cookie-2', 'cupcake-1', 'cupcake-
 let sweetsObj = []
 for(let i = 0; i < sweets.length; i++){
     sweetsObj.push({
+        id: i,
         name: sweets[i],
         price: 11 + i,
-        image: `images/${sweets[i]}.jpg`
+        image: `images/${sweets[i]}.jpg`,
+        count: 1
     })
 }
-
 let card = document.querySelector(".bottom")
 
 for(let i = 0; i < sweetsObj.length; i++){
     let div = document.createElement("div")
     div.className = 'card'
+    div.setAttribute("id", sweetsObj[i].id)
     div.innerHTML = `
             <div class="img">
                 <img src="${sweetsObj[i].image}" alt="">
@@ -26,6 +28,50 @@ for(let i = 0; i < sweetsObj.length; i++){
     card.appendChild(div)
 }
 
+// ============================= for try ============================== //
+let xOfCartCar = document.querySelectorAll(".img i")
+
+xOfCartCar.forEach(i => {
+    i.addEventListener("click", xAddToLocalStorage)
+}) 
+let xArr = []
+function xAddToLocalStorage(e) {
+    xArr = localStorage.sweets !== undefined ? JSON.parse(localStorage.getItem("sweets")) : [] 
+    
+    let theId = +e.target.parentElement.parentElement.getAttribute("id")
+    let item;
+
+    if(localStorage.getItem("sweets") === null){
+        item = {__id: theId, count: 1}
+        xArr.push(item)
+        return localStorage.setItem("sweets", JSON.stringify(xArr))
+    }else{
+        xArr = JSON.parse(localStorage.getItem("sweets"))
+        
+        let newCount = 1;
+        for(let i = 0; i < xArr.length; i++){
+            newCount = xArr[i].count;
+            if(xArr[i].__id === theId){
+                xArr.splice(i, 1)
+                newCount++;
+            }
+        }
+        item = {__id: theId, count: newCount}
+        xArr.push(item)
+        return localStorage.setItem("sweets", JSON.stringify(xArr))
+    }
+    console.log(xArr);
+}
+function xFromLocalStorageToCart() {
+    let xArrSweets = JSON.parse(localStorage.getItem("sweets"))
+    let newArrSweets = []
+    for(let i = 0; i < sweetsObj.length; i++) {
+        console.log(xArrSweets[i].__id);
+    }
+}
+xFromLocalStorageToCart()
+// ============================= for try ============================== //
+
 // Get What is in The Storage 
 window.addEventListener("load", ()=>{
     let theUrl;
@@ -35,20 +81,23 @@ window.addEventListener("load", ()=>{
                 theUrl = sweetsObj[i].image
                 let createdivFromStorage = document.createElement('div')
                 createdivFromStorage.className = 'choice'
+                createdivFromStorage.setAttribute("id", sweetsObj[i].id)
                 createdivFromStorage.innerHTML = `
-                        <img src="${theUrl}" alt="">
-                        <div class="name-price">
-                            <span>${localStorage.key(i)}</span>
-                            <span class = 'price'>${localStorage.getItem(localStorage.key(i))}</span>
+                    <div className="img">
+                        <img src="${theUrl}">
                         </div>
-                        <i class="fa-solid fa-trash-can"></i>`
+                    <div class="name-price">
+                        <span>${localStorage.key(i)}</span>
+                        <span class = 'price'>${localStorage.getItem(localStorage.key(i))}</span>
+                    </div>
+                    <i class="fa-solid fa-trash-can"></i>`
                         
                 document.querySelector(".product").appendChild(createdivFromStorage)
             }
         }
     }
     let numitems = document.querySelector(".cart-shopping .num-items").innerText = localStorage.length
-    let priceList = document.querySelectorAll('.side-bar .choice .name-price .price')
+    let priceList = document.querySelectorAll('.side-bar .back .choice .name-price .price')
     changePrice(priceList)
     let icons = document.querySelectorAll('.choice i')
     IconToDelete(icons)
@@ -60,27 +109,29 @@ let btnSideCart = document.querySelector('.cart-shopping')
 let sideBar = document.querySelector(".side-bar")
 let body = document.querySelector("body")
 
-checkBoolean()
+let changeBoolean = false;
 
-let changeBoolean = true;
-let clicked = true;
-function checkBoolean() {
-    btnSideCart.onclick = function (){
-        if (btnSideCart.contains(event.target)) {
-            if(clicked){
-                sideBar.style.opacity = '0.8'
-                sideBar.style.zIndex = 2 
-                clicked = false
-            }
-            else{
-                sideBar.style.opacity = '0'
-                sideBar.style.zIndex = -2 
-                clicked = true
-            }
-        }
+btnSideCart.onclick = showSideBar
+document.querySelector(".cart").onclick = showSideBar
+function showSideBar(){
+    sideBar.classList.toggle("show")
+    if(document.querySelector(".contacts-all").classList.contains("show") && document.querySelector(".bar").classList.contains("motion")){
+        document.querySelector(".contacts-all").classList.toggle("show")
+        document.querySelector(".bar").classList.toggle("motion")
     }
 }
-checkBoolean()
+let hideSideBar = () => {
+    sideBar.classList.remove("show")
+}
+window.addEventListener("scroll", hideSideBar)
+document.querySelector("header .side-bar .head-close button").onclick = hideSideBar
+
+sideBar.onclick = (e) => {
+    if (e.target.classList.contains("background")) {
+        sideBar.classList.remove("show")
+    }
+}
+
 // change the cart setting function without filter
 changeCartSettings()
 
@@ -136,14 +187,20 @@ let bar = document.querySelector(".bar")
 let menu = document.querySelector(".contacts-all")
 
 bar.addEventListener('click', () => {
-    if (menu.style.display === 'none') {
-        menu.style.display = 'block'
-        bar.classList.add("motion")
-    }else{
-        menu.style.display = 'none'
-        bar.classList.remove("motion")
+    menu.classList.toggle("show")
+    bar.classList.toggle("motion")
+    if (document.querySelector(".side-bar").classList.contains("show")){
+        document.querySelector(".side-bar").classList.toggle("show")
     }
 })
+
+menu.onclick = (e) => {
+    if (e.target.classList.contains("background")) {
+        console.log(true);
+        menu.classList.toggle("show")
+        bar.classList.toggle("motion")
+    }
+}
 // change cart settings
 function changeCartSettings() {
     
@@ -161,18 +218,23 @@ function changeCartSettings() {
         let productsPrice = product.querySelector('.price-card .price').innerText
         let productsName = product.querySelector('.price-card .name').innerText
     
+        let amount = 0
         // when click on i add the div
         productBuyingIcon.addEventListener("click", (e) => {
             // productSideBar creation
             let createNewDiv = document.createElement('div')
             createNewDiv.className = 'choice'
             createNewDiv.innerHTML = `
-                <img src="${productImg}" alt="">
-                <div class="name-price">
+                <div className="img">
+                    <img src="${productImg}" alt="">
                     <span>${productsName}</span>
+                </div>
+                <span class = 'price'>${amount+1}</span>
+                <div class="name-price">
                     <span class = 'price'>${productsPrice}</span>
                 </div>
-                <i class="fa-solid fa-trash-can"></i>`   
+                <i class="fa-solid fa-trash-can"></i>
+                `   
     
     
             // append inside the side-bar
@@ -200,11 +262,10 @@ function changeCartSettings() {
 
 // add to storage function
 function setToStorage(choicesList) {
-    // console.log(choicesList);
     choicesList.forEach(choice => {
         let thePrice = choice.children[1].children[1].innerText
         let theName = choice.children[1].children[0].innerText
-        let setChoiceToStorage = localStorage.setItem(theName, thePrice)
+        localStorage.setItem(theName, thePrice)
     } )
 }
 // delete icon function
@@ -279,9 +340,6 @@ function hoverFunc(){
     
             cardImage.classList.add("hovered")
             
-            // cardImage.className = 'hovered'
-            // cover.appendChild(cardImage)
-            
             cover.onmouseover = function(){
                 cardImage.classList.remove("hovered")
                 cover.classList.remove('cover')
@@ -299,17 +357,12 @@ window.addEventListener("scroll", () => {
     if(window.scrollY >= 555){
         contactsIcons.style.display = 'flex'
     }
-    // else{
-    //     contactsIcons.style.display = 'none'
-    // }
 })
 
 // filtering after typing function
 let searchIcon = document.querySelector(".search i")
 let filterText = document.querySelector(".search input")
 function filtering (){
-    // let regex = /[A-Za-z][^0-9_-]/ig
-    // let checkValue = filterText.match(regex).join("")
     let divs = document.querySelectorAll(".bottom .card")
     divs.forEach(div => {
          div.remove("div")
@@ -378,10 +431,17 @@ function motion(){
                     color: 'black',
                     transform: `translate(${leftToString}, ${topToString}) scale(0.2)`,
                     zIndex: 4,
-                    // transform: 'scale(0.2)'
                 }
             ], 500);
         })
     })
 }
 motion()    
+
+
+// onload for the side bar to be hidden
+window.addEventListener("load", () => {
+    if (window.innerWidth <= 420) {
+        document.querySelector(".show").style.display = "none"
+    }
+})

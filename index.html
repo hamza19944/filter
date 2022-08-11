@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./style/style.css">
-    <link rel="stylesheet" href="./style/all.min.css">
+    <link rel="stylesheet" href="style/style.css">
+    <link rel="stylesheet" href="style/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lemonada:wght@300;400;500;600;700&family=Nothing+You+Could+Do&family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -15,13 +15,14 @@
     <!-- start header  -->
     <header>
         <div class="logo">
-            <a href="#"><img src="./images/logo.png" alt="logo"></a>
+            <a href="#"><img src="images/logo.png" alt="logo"></a>
         </div>
         <div class="contacts-all">
+            <div class="background"></div>
             <ul class="contacts">
                 <li><a href="#">Home</a></li>
                 <li><a href="#">About</a></li>
-                <li><a href="#">Store</a></li>
+                <li class="cart"><a href="#">Cart</a></li>
             </ul>
         </div>
         <div class="mob">
@@ -39,15 +40,27 @@
         </div>
         <!-- start side-bar  -->
         <div class="side-bar">
-            <div class="product">
-                
-            </div>
-            <div class="sum">
-                total $ <span>0.00</span>
-            </div>
-            <div class="card-btns">
-                <button>clear cart</button>
-                <button>check out</button>
+            <div class="background"></div>
+            <div class="back">
+                <div class="head-close" style="position: relative; width: 100%">
+                    <h2>Cart</h2>
+                    <button>X</button>
+                </div>
+                <div class="info-prod">
+                    <span>Sweet</span>
+                    <span>Amount</span>
+                    <span>Price</span>
+                </div>
+                <div class="product">
+                    
+                </div>
+                <div class="sum">
+                    total $ <span>0.00</span>
+                </div>
+                <div class="card-btns">
+                    <button>clear cart</button>
+                    <button>check out</button>
+                </div>
             </div>
         </div>
         <!-- end side-bar  -->
@@ -68,7 +81,7 @@
                 <input type="button" value="Explore" class="btn">
             </div>
             <div class="image">
-                <img src="./images/cake-1.jpg" alt="">
+                <img src="images/cake-1.jpg" alt="">
             </div>
         </div>
     </div>
@@ -106,6 +119,6 @@
         <i class="fa-brands fa-twitter"></i>
     </div>
     <!-- end contacts icons -->
-    <script src="./script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
