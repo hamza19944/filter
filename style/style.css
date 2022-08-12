@@ -233,8 +233,21 @@ header .side-bar .back{
 }
 header .side-bar .back .info-prod{
     margin: 10px 0;
+    width: 100%;
+    text-align: center;
 }
-header .side-bar .back .info-prod span{}
+header .side-bar .back .info-prod span:first-child{
+    flex: 0 0 45%;
+    max-width: 45%;
+}
+header .side-bar .back .info-prod span:nth-child(2){
+    flex: 0 0 25%;
+    max-width: 25%;
+}
+header .side-bar .back .info-prod span:last-child{
+    flex: 0 0 25%;
+    max-width: 25%;
+}
 .side-bar .background{
     position: fixed;
     display: block;
@@ -297,17 +310,32 @@ header .side-bar h2{
     background-color: var(--main-color);
     bottom: 0;
 }
-.side-bar .product .choice img{
-    border-radius: 50%;
-    width: 80px;
-    height: 80px;
-    margin: 10px 0;
-}
-.side-bar .product .choice .name-price{
+.side-bar .product .choice .img{
     display: flex;
-    flex-grow: 1;
-    justify-content: space-around;
-    padding: 0 12px;
+    flex-direction: column;
+    flex: 0 0 45%;
+    max-width: 45%;
+    align-items: center;
+}
+.side-bar .product .choice .img img{
+    height: 50px;
+    width: 50px;
+}
+.side-bar .product .choice .amount{
+    flex: 0 0 25%;
+    max-width: 25%;
+    text-align: center;
+    border: none;
+    font-weight: bold;
+    font-size: 16px;
+}
+.choice input[type=number]::-webkit-inner-spin-button {
+    opacity: 1;
+}
+.side-bar .product .choice .price{
+    flex: 0 0 25%;
+    max-width: 25%;
+    text-align: center;
 }
 
 .side-bar .product .choice i{

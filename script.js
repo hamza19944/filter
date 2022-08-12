@@ -32,7 +32,15 @@ for(let i = 0; i < sweetsObj.length; i++){
 let xOfCartCar = document.querySelectorAll(".img i")
 
 xOfCartCar.forEach(i => {
-    i.addEventListener("click", xAddToLocalStorage)
+    i.addEventListener("click", (e) => {
+        if (document.querySelector(".product").hasChildNodes()) {
+            document.querySelectorAll(".product .choice").forEach(cho => {
+                cho.remove()
+            })
+        }
+        xAddToLocalStorage(e)
+        xAddToCart()
+    })
 }) 
 let xArr = []
 function xAddToLocalStorage(e) {
@@ -60,49 +68,82 @@ function xAddToLocalStorage(e) {
         xArr.push(item)
         return localStorage.setItem("sweets", JSON.stringify(xArr))
     }
-    console.log(xArr);
 }
-function xFromLocalStorageToCart() {
-    let xArrSweets = JSON.parse(localStorage.getItem("sweets"))
-    let newArrSweets = []
-    for(let i = 0; i < sweetsObj.length; i++) {
-        console.log(xArrSweets[i].__id);
-    }
-}
-xFromLocalStorageToCart()
-// ============================= for try ============================== //
-
-// Get What is in The Storage 
-window.addEventListener("load", ()=>{
-    let theUrl;
-    for(let j = 0; j < sweetsObj.length; j++){
-        for (let i = 0; i < localStorage.length; i++) {
-            if(sweetsObj[j].name === localStorage.key(i)){
-                theUrl = sweetsObj[i].image
-                let createdivFromStorage = document.createElement('div')
-                createdivFromStorage.className = 'choice'
-                createdivFromStorage.setAttribute("id", sweetsObj[i].id)
-                createdivFromStorage.innerHTML = `
-                    <div className="img">
-                        <img src="${theUrl}">
-                        </div>
-                    <div class="name-price">
-                        <span>${localStorage.key(i)}</span>
-                        <span class = 'price'>${localStorage.getItem(localStorage.key(i))}</span>
-                    </div>
-                    <i class="fa-solid fa-trash-can"></i>`
-                        
-                document.querySelector(".product").appendChild(createdivFromStorage)
+const xFromLocalStorageToCart = () => {
+    if(localStorage.getItem("sweets") !== null){
+        let xArrSweets = JSON.parse(localStorage.getItem("sweets"))
+        let newArrSweets = []
+        for(let i = 0; i < sweetsObj.length; i++) {
+            for(let j = 0; j < xArrSweets.length; j++){
+                if(sweetsObj[i].id === xArrSweets[j].__id && xArrSweets[j].count > 0){
+                    sweetsObj[i].count = xArrSweets[j].count
+                    newArrSweets.push(sweetsObj[i])
+                }
             }
         }
+        return newArrSweets    
     }
-    let numitems = document.querySelector(".cart-shopping .num-items").innerText = localStorage.length
-    let priceList = document.querySelectorAll('.side-bar .back .choice .name-price .price')
-    changePrice(priceList)
-    let icons = document.querySelectorAll('.choice i')
-    IconToDelete(icons)
-})
+}
+const xAddToCart = (prods = xFromLocalStorageToCart() ? xFromLocalStorageToCart() : []) => {
+    console.log(prods);
+    const xCart = document.querySelector(".product")
+    if (prods.length !== 0) {
+        prods.forEach(prod => {
+            const createdDiv = document.createElement("div")
+            createdDiv.classList.add("choice")
+            createdDiv.setAttribute("id", prod.id)
+            createdDiv.innerHTML = `
+                <div class="img">
+                    <img src="./images/icons8-donut-64.png" alt="">
+                    <span>${prod.name}</span>
+                </div>
+                <input type="number" class="amount" value="${prod.count}" min="0"/>
+                <span class="price">$${prod.count * prod.price}</span>
+                <i class="fa-solid fa-trash-can"></i>
+            `
+            xCart.appendChild(createdDiv)
+        })
+    }
+}
 
+setTimeout(() => {
+    document.querySelectorAll(".product .choice i").forEach(product => {
+        product.addEventListener("click", () => {
+            console.log("clicked");
+            product.parentElement.remove()
+            let arrs = JSON.parse(localStorage.getItem("sweets"));
+            arrs.forEach((arr, i) => {
+                if(+product.parentElement.getAttribute("id") === arr.__id && arr.count > 0){
+    
+                    arr.count--
+                    if(arr.count <= 0){
+                        arrs.splice(i, 1)
+                    }
+                }
+            })
+            localStorage.setItem("sweets", JSON.stringify(arrs))
+        })
+    })
+    document.querySelectorAll(".product .choice .amount").forEach(xAmount => {
+        let xValue = +xAmount.value
+        xAmount.addEventListener("change", (e)=> {
+            if(xValue > +xAmount.value){
+                if(+xAmount.value === 0){
+                    e.target.parentElement.querySelector(".price").innerHTML = 0
+                }else{
+                    e.target.parentElement.querySelector(".price").innerHTML = +e.target.parentElement.querySelector(".price").innerHTML / xValue
+                }
+            }else{
+                console.log(false);
+            }
+        })
+    })
+}, 500)
+
+window.addEventListener("load", () => {
+    xAddToCart()
+});
+// ============================= for try ============================== //
 
 // hide and appear side-cart
 let btnSideCart = document.querySelector('.cart-shopping')
@@ -225,14 +266,12 @@ function changeCartSettings() {
             let createNewDiv = document.createElement('div')
             createNewDiv.className = 'choice'
             createNewDiv.innerHTML = `
-                <div className="img">
-                    <img src="${productImg}" alt="">
+                <div class="img">
+                    <img src="./images/icons8-donut-64.png" alt="">
                     <span>${productsName}</span>
                 </div>
-                <span class = 'price'>${amount+1}</span>
-                <div class="name-price">
-                    <span class = 'price'>${productsPrice}</span>
-                </div>
+                <span class = 'amount'>${amount+1}</span>
+                <span class = 'price'>${productsPrice}</span>
                 <i class="fa-solid fa-trash-can"></i>
                 `   
     
@@ -262,11 +301,11 @@ function changeCartSettings() {
 
 // add to storage function
 function setToStorage(choicesList) {
-    choicesList.forEach(choice => {
-        let thePrice = choice.children[1].children[1].innerText
-        let theName = choice.children[1].children[0].innerText
-        localStorage.setItem(theName, thePrice)
-    } )
+    // choicesList.forEach(choice => {
+    //     let thePrice = choice.children[1].children[1].innerText
+    //     let theName = choice.children[1].children[0].innerText
+    //     localStorage.setItem(theName, thePrice)
+    // } )
 }
 // delete icon function
 function IconToDelete(icons){
